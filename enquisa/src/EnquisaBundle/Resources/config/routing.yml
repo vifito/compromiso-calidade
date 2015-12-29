@@ -1,0 +1,3 @@
+enquisa_homepage:
+    path:     /
+    defaults: { _controller: EnquisaBundle:Default:index }

@@ -122,7 +122,7 @@ function selected($weights) {
     $selected = array_search(max($weights), $weights);
     
     foreach($weights as $i => $value) {
-        if(($i != $selected) && ($value+8 >= $weights[$selected])) {
+        if(($i != $selected) && ($value >= $weights[$selected])) {
             return -1;
         }
     }
@@ -130,8 +130,8 @@ function selected($weights) {
     return $selected;
 }
 
-//$imagePath = './images/0.jpg';
-$imagePath = './images/1.jpg';
+$imagePath = './images/0.png';
+//$imagePath = './images/1.jpg';
 $formulario = new \Imagick(realpath($imagePath));
 
 
