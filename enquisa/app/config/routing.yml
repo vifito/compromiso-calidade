@@ -1,7 +1,16 @@
+enquisa_enquisa:
+    resource: "@EnquisaBundle/Controller/EnquisaController.php"
+    type:     annotation
+
+enquisa_pregunta:
+    resource: "@EnquisaBundle/Controller/PreguntaController.php"
+    type:     annotation
+
+enquisa_restaurante:
+    resource: "@EnquisaBundle/Controller/RestauranteController.php"
+    type:     annotation
+
 enquisa:
     resource: "@EnquisaBundle/Resources/config/routing.yml"
     prefix:   /
 
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation

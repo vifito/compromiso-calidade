@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Restaurante</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ restaurante.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ restaurante.nome }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('restaurante_index') }}">Voltar ao listado</a>
+        </li>
+        <li>
+            <a href="{{ path('restaurante_edit', { 'id': restaurante.id }) }}">Editar</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Eliminar">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

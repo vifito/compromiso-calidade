@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Subir Enquisa</h1>
+
+    {{ form_start(upload_form) }}
+        {{ form_widget(upload_form) }}
+        <input type="submit" value="Subir" />
+    {{ form_end(upload_form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('enquisa_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

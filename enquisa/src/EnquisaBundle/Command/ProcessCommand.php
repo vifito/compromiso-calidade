@@ -6,6 +6,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 
 class ProcessCommand extends ContainerAwareCommand
 {
@@ -16,12 +18,12 @@ class ProcessCommand extends ContainerAwareCommand
             ->setDescription('Procesar un lote de enquisas')
             ->addArgument(
                 'restaurante',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'De que restaurante son as enquisas?'
             )
             ->addArgument(
                 'ficheiro',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'Ficheiro PDF do que se procesan as enquisas?'
             );
 
@@ -32,8 +34,43 @@ class ProcessCommand extends ContainerAwareCommand
     {
         $restaurante = $input->getArgument('restaurante');
 
-        $text = $restaurante;
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $restaurantes = $em->getRepository('EnquisaBundle:Restaurante')->findAll();
 
-        $output->writeln($text);
+
+        if(empty($restaurante)) {
+            /*
+            $helper = $this->getHelper('question');
+            $question = new ChoiceQuestion(
+                'Escolle un restaurante',
+                $this->restaurantesToArray($restaurantes),
+                0
+            );
+            $question->setErrorMessage('O restaurante %s non está recollido no sistema.');
+
+            $restaurante = $helper->ask($input, $output, $question);
+            $output->writeln('Restaurante: ' . $restaurante);
+            */
+
+            $helper = $this->getHelper('question');
+            $question = new Question('Nome do restaurante: ');
+            $question->setAutocompleterValues($this->restaurantesToArray($restaurantes));
+
+            $restaurante = $helper->ask($input, $output, $question);
+        }
+
+        $output->writeln($restaurante);
+    }
+
+    private function restaurantesToArray($restaurantes)
+    {
+        $resultado = array();
+
+        foreach($restaurantes as $restaurante) {
+            //$resultado[$restaurante->getId()] = $restaurante->getNome();
+            $resultado[] = $restaurante->getNome();
+        }
+
+        return $resultado;
     }
 }

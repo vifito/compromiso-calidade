@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Enquisa list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Ficheiro</th>
+                <th>Procesada</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for enquisa in enquisas %}
+            <tr>
+                <td><a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.id }}</a></td>
+                <td>{{ enquisa.nome }}</td>
+                <td>{{ enquisa.ficheiro }}</td>
+                <td>{% if enquisa.procesada %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('enquisa_edit', { 'id': enquisa.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('enquisa_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

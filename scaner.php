@@ -98,7 +98,7 @@ function weight($imageRegion) {
     // Contar pixels
     $it = new \ImagickPixelIterator($imageRegion);
     
-    $whitePixel = new ImagickPixel('#000');
+    $whitePixel = new \ImagickPixel('#000');
     
     $totalPixels = 0;
     $dirtyPixels = 0;

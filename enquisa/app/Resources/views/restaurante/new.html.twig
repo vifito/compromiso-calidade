@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Novo Restaurante{% endblock %}
+
+{% block pagetitle %}Novo Restaurante{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('restaurante_index') }}">Listado Restaurantes</a>
+        </li>
+    </ul>
+{% endblock %}

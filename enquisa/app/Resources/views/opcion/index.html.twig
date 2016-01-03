@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Opcion list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Valor</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for opcion in opcions %}
+            <tr>
+                <td><a href="{{ path('opcion_show', { 'id': opcion.id }) }}">{{ opcion.id }}</a></td>
+                <td>{{ opcion.valor }}</td>
+                <td>{{ opcion.width }}</td>
+                <td>{{ opcion.height }}</td>
+                <td>{{ opcion.x }}</td>
+                <td>{{ opcion.y }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('opcion_show', { 'id': opcion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('opcion_edit', { 'id': opcion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('opcion_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

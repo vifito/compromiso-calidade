@@ -8,6 +8,7 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('EnquisaBundle:Default:index.html.twig');
+        return $this->redirectToRoute('restaurante_index');
+        //return $this->render('EnquisaBundle:Default:index.html.twig');
     }
 }
