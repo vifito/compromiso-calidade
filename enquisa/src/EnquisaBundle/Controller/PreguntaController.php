@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Pregunta controller.
  *
- * @Route("/pregunta")
+ * @Route("/admin/pregunta")
  */
 class PreguntaController extends Controller
 {

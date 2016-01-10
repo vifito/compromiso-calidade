@@ -12,7 +12,7 @@ use EnquisaBundle\Form\EnquisaType;
 /**
  * Enquisa controller.
  *
- * @Route("/enquisa")
+ * @Route("/admin/enquisa")
  */
 class EnquisaController extends Controller
 {
@@ -29,6 +29,23 @@ class EnquisaController extends Controller
         $enquisas = $em->getRepository('EnquisaBundle:Enquisa')->findAll();
 
         return $this->render('enquisa/index.html.twig', array(
+            'enquisas' => $enquisas,
+        ));
+    }
+
+    /**
+     * Dashboard.
+     *
+     * @Route("/", name="enquisa_dashboard")
+     * @Method("GET")
+     */
+    public function dashboardAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $enquisas = $em->getRepository('EnquisaBundle:Enquisa')->findAll();
+
+        return $this->render('enquisa/dashboard.html.twig', array(
             'enquisas' => $enquisas,
         ));
     }

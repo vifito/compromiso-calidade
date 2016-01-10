@@ -12,7 +12,7 @@ use EnquisaBundle\Form\RespostaType;
 /**
  * Resposta controller.
  *
- * @Route("/resposta")
+ * @Route("/admin/resposta")
  */
 class RespostaController extends Controller
 {

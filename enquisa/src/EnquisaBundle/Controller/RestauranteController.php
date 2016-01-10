@@ -12,7 +12,7 @@ use EnquisaBundle\Form\RestauranteType;
 /**
  * Restaurante controller.
  *
- * @Route("/restaurante")
+ * @Route("/admin/restaurante")
  */
 class RestauranteController extends Controller
 {

@@ -12,7 +12,7 @@ use EnquisaBundle\Form\OpcionType;
 /**
  * Opcion controller.
  *
- * @Route("/opcion")
+ * @Route("/admin/opcion")
  */
 class OpcionController extends Controller
 {
