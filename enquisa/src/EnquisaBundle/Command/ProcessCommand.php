@@ -2,11 +2,12 @@
 namespace EnquisaBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
 class ProcessCommand extends ContainerAwareCommand
@@ -16,41 +17,33 @@ class ProcessCommand extends ContainerAwareCommand
         $this
             ->setName('enquisa:procesar')
             ->setDescription('Procesar un lote de enquisas')
+            ->setDefinition(
+                new InputDefinition(array(
+                    new InputOption('ficheiro', 'i', InputOption::VALUE_REQUIRED),
+                ))
+            )
             ->addArgument(
                 'restaurante',
                 InputArgument::OPTIONAL,
                 'De que restaurante son as enquisas?'
             )
-            ->addArgument(
-                'ficheiro',
-                InputArgument::OPTIONAL,
-                'Ficheiro PDF do que se procesan as enquisas?'
-            );
-
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $container = $this->getContainer();
+
+        /** @var  $logger */
+        $logger = $container->get('logger');
+
         $restaurante = $input->getArgument('restaurante');
+        $ficheiro    = $input->getOption('ficheiro');
 
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        $restaurantes = $em->getRepository('EnquisaBundle:Restaurante')->findAll();
-
+        $em = $container->get('doctrine')->getManager();
 
         if(empty($restaurante)) {
-            /*
-            $helper = $this->getHelper('question');
-            $question = new ChoiceQuestion(
-                'Escolle un restaurante',
-                $this->restaurantesToArray($restaurantes),
-                0
-            );
-            $question->setErrorMessage('O restaurante %s non está recollido no sistema.');
-
-            $restaurante = $helper->ask($input, $output, $question);
-            $output->writeln('Restaurante: ' . $restaurante);
-            */
+            $restaurantes = $em->getRepository('EnquisaBundle:Restaurante')->findAll();
 
             $helper = $this->getHelper('question');
             $question = new Question('Nome do restaurante: ');
@@ -59,7 +52,17 @@ class ProcessCommand extends ContainerAwareCommand
             $restaurante = $helper->ask($input, $output, $question);
         }
 
-        $output->writeln($restaurante);
+        $logger->info('Restaurante: ' . $restaurante);
+
+        $resultado = $em->getRepository('EnquisaBundle:Restaurante')->findByNome($restaurante);
+        if(count($resultado) !== 1) {
+            throw new Exception('Restaurante non recoñecido');
+        }
+
+        $scanner = $container->get('scanner');
+
+        // Pasar o path completo ao ficheiro
+        $scanner->run($resultado[0], $ficheiro);
     }
 
     private function restaurantesToArray($restaurantes)
@@ -73,4 +76,6 @@ class ProcessCommand extends ContainerAwareCommand
 
         return $resultado;
     }
+
+
 }

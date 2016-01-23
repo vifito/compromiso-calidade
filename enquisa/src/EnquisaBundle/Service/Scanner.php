@@ -4,6 +4,9 @@ namespace EnquisaBundle\Service;
 
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Filesystem\Filesystem;
+use Monolog\Logger;
 
 class Scanner {
 
@@ -23,20 +26,33 @@ class Scanner {
      */
     private $em = NULL;
 
+    /**
+     * @var Logger|null
+     */
+    private $logger = NULL;
+
     private $i = 0;
 
 
-    public function __construct(EntityManager $em, $basedir) {
+    public function __construct(EntityManager $em, $basedir, Logger $logger) {
         $this->basedir = $basedir;
-        $this->em = $em;
+        $this->em      = $em;
+        $this->logger  = $logger;
     }
 
 
     public function run(\EnquisaBundle\Entity\Restaurante $restaurante, $filename = NULL) {
         // Establecer filename se proporciona o parámetro filename
-        if ($filename !== NULL && file_exists($filename)) {
+        if ($filename !== NULL) {
             $this->setFilename($filename);
         }
+
+        $fs = new Filesystem();
+        if(!$fs->exists($this->getFilename())) {
+            throw new Exception('A ruta ao ficheiro non é válida');
+        }
+
+        $this->logger->info('Procesando ficheiro: ' . $this->getFilename());
 
         // Cargar rexións
         $this->loadRexions();
@@ -47,6 +63,7 @@ class Scanner {
         // Extraer as páxinas do PDF, gardar os paths de cada páxina/imaxe
         $pages = $this->extractPages();
         foreach ($pages as $page) {
+            $this->logger->info('Procesando páxina: ' . $page);
             $this->processPage($page);
         }
 
@@ -107,7 +124,7 @@ class Scanner {
             $x = $question['opcions'][$i]['x'];
             $y = $question['opcions'][$i]['y'];
 
-            $box = $enquisa->clone();
+            $box = clone $enquisa;
 
             $box->cropImage($width, $height, $x, $y);
 
