@@ -10,4 +10,19 @@ namespace EnquisaBundle\Repository;
  */
 class EnquisaRepository extends \Doctrine\ORM\EntityRepository
 {
+    // TODO: proba de consulta
+    public function getEnquisas()
+    {
+        return $this->createQueryBuilder('e')
+            ->addSelect('r')
+            ->join('e.respostas', 'r')
+            ->addSelect('o')
+            ->join('r.opcion', 'o')
+            ->addSelect('p')
+            ->join('o.pregunta', 'p')
+
+            ->orderBy('p.orde')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
