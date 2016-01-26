@@ -207,13 +207,12 @@ class LoadPreguntaData implements FixtureInterface
                 $opcion->setWidth($opc['width']);
                 $opcion->setHeight($opc['height']);
                 $opcion->setX($opc['x']);
-                $opcion->setY($opc['y']);                                
+                $opcion->setY($opc['y']);
                 
-                $pregunta->addOpcion($opcion);
+                $opcion->setPregunta($pregunta);
                 $manager->persist($opcion);
             }            
-            
-            $manager->persist($pregunta);            
+                                    
             $manager->flush();
         }
        
