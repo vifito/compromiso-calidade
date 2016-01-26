@@ -13,17 +13,17 @@
             </tr>
         </thead>
         <tbody>
-        {% for preguntum in preguntas %}
+        {% for pregunta in preguntas %}
             <tr>
                 <td>
-                    <a href="{{ path('pregunta_show', { 'id': preguntum.id }) }}" title="{{ preguntum.id }}">
-                        {{ preguntum.texto }}
+                    <a href="{{ path('pregunta_show', { 'id': pregunta.id }) }}" title="{{ pregunta.id }}">
+                        {{ pregunta.texto }}
                     </a>
                 </td>
-                <td>{{ preguntum.orde }}</td>
+                <td>{{ pregunta.orde }}</td>
                 <td>
                     <select>
-                    {% for opcion in preguntum.opcions %}
+                    {% for opcion in pregunta.opcions %}
                         <option>{{ opcion.valor }}</option>
                     {% endfor %}
                     </select>
@@ -31,10 +31,10 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('pregunta_show', { 'id': preguntum.id }) }}">show</a>
+                            <a href="{{ path('pregunta_show', { 'id': pregunta.id }) }}">show</a>
                         </li>
                         <li>
-                            <a href="{{ path('pregunta_edit', { 'id': preguntum.id }) }}">edit</a>
+                            <a href="{{ path('pregunta_edit', { 'id': pregunta.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>

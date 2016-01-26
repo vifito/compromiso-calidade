@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Pregunta 1: ...
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum nobis recusandae aliquam soluta laudantium reiciendis ipsa vitae modi veritatis aut. Saepe optio accusantium deleniti et inventore enim cupiditate deserunt velit!</p>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Pregunta 1: ...
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="morris-bar-chart"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    
+    <link href="{{ asset('assets/bower_components/morrisjs/morris.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script src="{{ asset('assets/bower_components/raphael/raphael-min.js') }}"></script>
+    <script src="{{ asset('assets/bower_components/morrisjs/morris.min.js') }}"></script>
+    {}
+    <script>
+    Morris.Bar({
+        element: 'morris-bar-chart',
+        data: [{
+            y: '2006',
+            a: 100,
+            b: 90
+        }, {
+            y: '2007',
+            a: 75,
+            b: 65
+        }, {
+            y: '2008',
+            a: 50,
+            b: 40
+        }, {
+            y: '2009',
+            a: 75,
+            b: 65
+        }, {
+            y: '2010',
+            a: 50,
+            b: 40
+        }, {
+            y: '2011',
+            a: 75,
+            b: 65
+        }, {
+            y: '2012',
+            a: 100,
+            b: 90
+        }],
+        xkey: 'y',
+        ykeys: ['a', 'b'],
+        labels: ['Series A', 'Series B'],
+        hideHover: 'auto',
+        resize: true
+    });
+    </script>
+{% endblock %}

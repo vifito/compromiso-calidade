@@ -36,18 +36,12 @@ class EnquisaController extends Controller
     /**
      * Dashboard.
      *
-     * @Route("/", name="enquisa_dashboard")
+     * @Route("/dashboard", name="enquisa_dashboard")
      * @Method("GET")
      */
     public function dashboardAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $enquisas = $em->getRepository('EnquisaBundle:Enquisa')->findAll();
-
-        return $this->render('enquisa/dashboard.html.twig', array(
-            'enquisas' => $enquisas,
-        ));
+        return $this->render('enquisa/dashboard.html.twig');
     }
 
     /**
