@@ -40,16 +40,21 @@ class EnquisaController extends Controller
      * @Method("GET")
      */
     public function dashboardAction()
-    {
+    {                
+        /** @var $em Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
-
-        $enquisas = $em->getRepository('EnquisaBundle:Enquisa')->getEnquisas();
-
-        dump($enquisas);
+        $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
+        
+        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats(26);
+        dump($preguntaStats);
+        
+        /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
+        dump($preguntasStats);*/
 
         return $this->render('enquisa/dashboard.html.twig', array(
-            'total' => 3,
-
+            'total' => $total,
+            'preguntaStats' => $preguntaStats,
+            //'preguntasStats' => $preguntasStats,
         ));
     }
 

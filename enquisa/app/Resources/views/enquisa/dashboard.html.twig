@@ -21,7 +21,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Pregunta 1: ...
+                {{ preguntaStats.0.texto }}
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -45,44 +45,20 @@
     
     <script src="{{ asset('assets/bower_components/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('assets/bower_components/morrisjs/morris.min.js') }}"></script>
-    {}
     <script>
-    Morris.Bar({
+    /*Morris.Bar({
         element: 'morris-bar-chart',
-        data: [{
-            y: '2006',
-            a: 100,
-            b: 90
-        }, {
-            y: '2007',
-            a: 75,
-            b: 65
-        }, {
-            y: '2008',
-            a: 50,
-            b: 40
-        }, {
-            y: '2009',
-            a: 75,
-            b: 65
-        }, {
-            y: '2010',
-            a: 50,
-            b: 40
-        }, {
-            y: '2011',
-            a: 75,
-            b: 65
-        }, {
-            y: '2012',
-            a: 100,
-            b: 90
-        }],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
+        data: {{ preguntaStats|json_encode()|raw }},
+        xkey: 'valor',
+        ykeys: ['conta'],
+        labels: ['{{ preguntaStats.0.texto }}'],
         hideHover: 'auto',
         resize: true
+    });*/
+    
+    Morris.Donut({
+        element: 'morris-bar-chart',
+        data: {{ preguntaStats|json_encode()|raw }}
     });
     </script>
 {% endblock %}
