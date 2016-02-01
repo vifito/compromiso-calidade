@@ -50,6 +50,10 @@
     
     <script src="{{ asset('assets/bower_components/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('assets/bower_components/morrisjs/morris.min.js') }}"></script>
+    
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    
     <script>
     /*Morris.Bar({
         element: 'morris-bar-chart',
@@ -68,8 +72,22 @@
     
     // FIXME: non ven de forma correcta o array
     $(document).ready(function() {
+        var path;
         $('.panel-pregunta').each(function(i, panel) {
-            console.log($(panel).data('id'));
+            var dataId = $(panel).data('id');
+            path = Routing.generate('enquisa_panel', { qid: dataId });
+            $.ajax({
+                url: path,
+                success: function(result) {
+                    console.log(result);
+                    
+                    Morris.Donut({
+                        element: $('div[data-id=' + dataId + '] div.chart'),
+                        data:  result.stats 
+                    });
+                },
+                dataType: 'json'
+            });
         });
     });
     </script>

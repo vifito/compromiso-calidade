@@ -3,6 +3,8 @@
 namespace EnquisaBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -45,33 +47,33 @@ class EnquisaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         
-        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
-        dump($preguntaStats);
+        $preguntas = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntas();
+        dump($preguntas);
         
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         dump($preguntasStats);*/
 
         return $this->render('enquisa/dashboard.html.twig', array(
             'total' => $total,
-            'preguntas' => $preguntaStats,
+            'preguntas' => $preguntas,
             //'preguntasStats' => $preguntasStats,
         ));
     }
     
     /**
      *
-     * @Route("/panel/{qid}", name="enquisa_panel")
+     * @Route("/panel/{qid}", name="enquisa_panel", options={"expose"=true})
      * @Method("GET")
      */
-    public function questionAction(Request $request)
+    public function questionAction(Request $request, $qid)
     {
         /** @var $em Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         
-        $questionId = $request->query->get('qid');
+        //$qid = $request->query->get('qid');
         
-        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($questionId);
+        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($qid);
         
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         dump($preguntasStats);*/

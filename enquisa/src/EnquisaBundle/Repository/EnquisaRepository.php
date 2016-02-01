@@ -58,15 +58,12 @@ DQL;
         return $query->getResult();
     }
     
-    public function getPreguntasStats()
+    public function getPreguntas()
     {        
         $dql =<<<DQL
-SELECT pregunta.id, pregunta.texto, opcion.valor, count(opcion.valor) AS conta
-FROM EnquisaBundle\Entity\Opcion opcion
-JOIN opcion.respostas resposta
-JOIN opcion.pregunta pregunta
-GROUP BY opcion.valor, pregunta.texto
-ORDER BY pregunta.orde, opcion.id
+SELECT pregunta.id, pregunta.texto
+FROM EnquisaBundle\Entity\Pregunta pregunta
+ORDER BY pregunta.orde
 DQL;
 
         $query = $this->getEntityManager()->createQuery($dql);

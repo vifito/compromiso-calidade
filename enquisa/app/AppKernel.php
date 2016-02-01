@@ -22,6 +22,10 @@ class AppKernel extends Kernel
             
             // Fixtures
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            
+            // friendsofsymfony/jsrouting-bundle
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
