@@ -18,19 +18,24 @@
         </div>
         <!-- /.panel -->
     </div>
+    
+    {# FIXME: non ven de forma correcta o array #}
+    {% for pregunta in preguntas %}
     <div class="col-lg-6">
-        <div class="panel panel-default">
+        <div class="panel panel-default panel-pregunta" data-id="{{ pregunta.id }}">
             <div class="panel-heading">
-                {{ preguntaStats.0.texto }}
+                {{ pregunta.texto }}
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <div id="morris-bar-chart"></div>
+                <div class="chart"></div>
             </div>
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
     </div>
+    {% endfor %}
+        
 </div>
 {% endblock %}
 
@@ -48,17 +53,24 @@
     <script>
     /*Morris.Bar({
         element: 'morris-bar-chart',
-        data: {{ preguntaStats|json_encode()|raw }},
+        data:  preguntaStats|json_encode()|raw ,
         xkey: 'valor',
         ykeys: ['conta'],
-        labels: ['{{ preguntaStats.0.texto }}'],
+        labels: [' preguntaStats.0.texto '],
         hideHover: 'auto',
         resize: true
-    });*/
+    });
     
     Morris.Donut({
         element: 'morris-bar-chart',
-        data: {{ preguntaStats|json_encode()|raw }}
+        data:  preguntaStats|json_encode()|raw 
+    });*/
+    
+    // FIXME: non ven de forma correcta o array
+    $(document).ready(function() {
+        $('.panel-pregunta').each(function(i, panel) {
+            console.log($(panel).data('id'));
+        });
     });
     </script>
 {% endblock %}

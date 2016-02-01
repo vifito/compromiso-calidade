@@ -45,7 +45,7 @@ class EnquisaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         
-        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats(26);
+        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         dump($preguntaStats);
         
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
@@ -53,9 +53,32 @@ class EnquisaController extends Controller
 
         return $this->render('enquisa/dashboard.html.twig', array(
             'total' => $total,
-            'preguntaStats' => $preguntaStats,
+            'preguntas' => $preguntaStats,
             //'preguntasStats' => $preguntasStats,
         ));
+    }
+    
+    /**
+     *
+     * @Route("/panel/{qid}", name="enquisa_panel")
+     * @Method("GET")
+     */
+    public function questionAction(Request $request)
+    {
+        /** @var $em Doctrine\ORM\EntityManager */
+        $em = $this->getDoctrine()->getManager();
+        $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
+        
+        $questionId = $request->query->get('qid');
+        
+        $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($questionId);
+        
+        /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
+        dump($preguntasStats);*/
+        
+        return new JsonResponse([
+            'stats' => $preguntaStats,
+        ]);
     }
 
     /**
