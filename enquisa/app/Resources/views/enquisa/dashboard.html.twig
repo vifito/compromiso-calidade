@@ -1,8 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Cadro de Mandos{% endblock %}
+
 {% block body %}
 <div class="row">
-    <div class="col-lg-6">
+    
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Resumo
@@ -12,12 +15,41 @@
                 <dl class="dl-horizontal">
                     <dt>Total enquisas</dt>
                     <dd>{{ total }}</dd>
+                    
+                    <dt>Total restaurantes</dt>
+                    <dd>{{ total_restaurantes }}</dd>
                 </dl>
+                
+                <br/>
+                
+                <select>
+                    
+                </select>
+                
+                <br/>
+                
+                <a href="{{ path('enquisa_upload') }}" class="btn btn-primary pull-right">
+                    <span class="fa fa-upload"></span> Subir nova enquisa
+                </a>
             </div>
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
     </div>
+    
+    {# <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Info
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum ab tempore in reprehenderit deserunt velit molestiae perspiciatis est laudantium harum! Deleniti perspiciatis in voluptates minus fuga vero repellendus ipsam tempora.
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div> #}
     
     {# FIXME: non ven de forma correcta o array #}
     {% for pregunta in preguntas %}

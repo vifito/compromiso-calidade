@@ -3,7 +3,9 @@
 namespace EnquisaBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -47,17 +49,58 @@ class EnquisaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         
+        $restaurantes = $em->getRepository('EnquisaBundle:Restaurante')->getTotal();
+        dump($restaurantes->findAll());
+        
+        
+        $totalRestaurantes = $restaurantes->getTotalRestaurantes();
+        dump($totalRestaurantes);
+        
         $preguntas = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntas();
         dump($preguntas);
-        
+                        
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         dump($preguntasStats);*/
 
         return $this->render('enquisa/dashboard.html.twig', array(
             'total' => $total,
+            'total_restaurantes' => $totalRestaurantes,
             'preguntas' => $preguntas,
+            'restaurantes' => $restaurantes->findAll(),
             //'preguntasStats' => $preguntasStats,
         ));
+    }
+    
+    /**
+     * Rotar imaxe.
+     *
+     * @Route("/rotate/{filename}", name="enquisa_rotate")
+     * @Method("GET")
+     */
+    public function rotateAction(Request $request, $filename)
+    {                
+        $dir = $this->container->getParameter('kernel.root_dir') .
+            '/../web/uploads/enquisas';
+        
+        $file = realpath($dir . '/' . $filename . '.png');
+        
+        if(!file_exists($file)) {
+            throw new \Exception('Ficheiro da enquisa non existe: ' . $file);
+        }
+        
+        $image = new \Imagick($file);
+        $image->rotateImage(new \ImagickPixel('#00000000'), 90);
+            
+        
+        $response = new Response();
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type','image/png');
+        /* $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '.png";');
+        $response->headers->set('Content-length', $image->getImageLength()); */
+        
+        $response->setContent($image->getImageBlob());
+
+        return $response;
     }
     
     /**

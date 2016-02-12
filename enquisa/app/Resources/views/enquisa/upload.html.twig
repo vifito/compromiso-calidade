@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Subir Enquisa{% endblock %}
+
 {% block body %}
     <h1>Subir Enquisa</h1>
 
@@ -17,7 +19,7 @@
         
         {# { form_widget(upload_form) } #}
         
-        <input type="submit" value="Subir" class="btn btn-primary" />        
+        <button type="submit" class="btn btn-primary"><span class="fa fa-upload"></span> Subir</button>        
         
     {{ form_end(upload_form) }}
 
@@ -29,7 +31,7 @@
     <script type="text/javascript" src="{{ asset('assets/bower_components/bootstrap-filestyle/src/bootstrap-filestyle.min.js') }}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-        $(":file").filestyle({input: false, buttonText: " Subir enquisa", iconName: "fa fa-inbox"});
+        $(":file").filestyle({input: false, buttonText: " Subir enquisa", iconName: "fa fa-file"});
     });
     </script>
     

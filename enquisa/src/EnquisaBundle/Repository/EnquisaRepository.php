@@ -38,6 +38,7 @@ class EnquisaRepository extends \Doctrine\ORM\EntityRepository
         return $count;
     }
     
+    
     public function getPreguntaStats($preguntaId)
     {        
         $dql =<<<DQL

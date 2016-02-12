@@ -10,4 +10,18 @@ namespace EnquisaBundle\Repository;
  */
 class RestauranteRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    public function getTotalRestaurantes()
+    {        
+        $dql =<<<DQL
+SELECT count(restaurante.nome) AS total
+FROM EnquisaBundle\Entity\Restaurante restaurante
+DQL;
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $count = $query->getSingleScalarResult();
+        
+        return $count;
+    }
+    
 }
