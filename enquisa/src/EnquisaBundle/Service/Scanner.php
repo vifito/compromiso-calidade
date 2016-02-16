@@ -34,14 +34,16 @@ class Scanner {
     private $i = 0;
 
 
-    public function __construct(EntityManager $em, $basedir, Logger $logger) {
+    public function __construct(EntityManager $em, $basedir, Logger $logger) 
+    {
         $this->basedir = $basedir;
         $this->em      = $em;
         $this->logger  = $logger;
     }
 
 
-    public function run(\EnquisaBundle\Entity\Restaurante $restaurante, $filename = NULL) {
+    public function run(\EnquisaBundle\Entity\Restaurante $restaurante, $filename = NULL) 
+    {
         // Establecer filename se proporciona o parámetro filename
         if ($filename !== NULL) {
             $this->setFilename($filename);
@@ -101,7 +103,8 @@ class Scanner {
     /**
      * @param $page string
      */
-    private function processPage($page) {
+    private function processPage($page) 
+    {
         $enquisa = new \Imagick(realpath($page));
 
         $filename = pathinfo($page)['filename'];
@@ -113,7 +116,8 @@ class Scanner {
         }
     }
 
-    private function processQuestion($enquisa, $question) {
+    private function processQuestion($enquisa, $question) 
+    {
 
         $weights = [-1];
 
@@ -133,11 +137,17 @@ class Scanner {
                 'opcionId' => $question['opcions'][$i]['id']
             );
         }
+        
+        $result = $this->selected($weights);
+        if($result == -1) {
+            $this->logger->error('Marca non detectada');
+        }
 
-        return $this->selected($weights);
+        return $result;
     }
 
-    private function weight($imageRegion) {
+    private function weight($imageRegion) 
+    {
 
         // Outros efectos para mellorar
         //$imageRegion->negateImage(true);
@@ -171,6 +181,8 @@ class Scanner {
 
         $percent = ($dirtyPixels*100/$totalPixels);
         //dump($percent);
+        
+        $this->logger->warning('%: ' . $percent);
 
         return $percent;
     }
@@ -182,10 +194,11 @@ class Scanner {
      * @param $weights
      * @return int
      */
-    private function selected($weights) {
+    private function selected($weights) 
+    {
         list($opcionId, $weight) = $this->maximo($weights);
 
-        foreach($weights as $value) {
+        foreach($weights as $value) {                        
             if(($opcionId != $value['opcionId']) && ($value['weight']+5 >= $weight)) {
                 return -1;
             }
@@ -209,18 +222,27 @@ class Scanner {
         return [$opcionId, $max];
     }
 
-    private function loadRexions() {
+    private function loadRexions() 
+    {        
         $this->rexions = $this->em->getRepository('EnquisaBundle:Pregunta')->getOpciones();
+        $this->logger->info('Rexións a procesar cargadas');
     }
 
     private function extractPages() {
         // Nome base para os ficheiros extraídos
         $basename = $this->basedir . '/' . pathinfo($this->filename)['filename'] . '-PDF-%03d.png';
+        
+        $this->logger->info('Basename: ' . $basename);
 
         $im = new \Imagick();
         $im->setResolution(300, 300);
+        //$im->setResolution(72, 72);
         $im->readImageBlob(file_get_contents($this->filename));
+        $this->logger->info('Cargando: ' . $this->filename);
+                
         $num_pages = $im->getNumberImages();
+        
+        $this->logger->info('Total enquisas a procesar: ' . $num_pages);
 
         $pages = array();
         for ($i = 0; $i < $num_pages; $i++) {
@@ -230,6 +252,8 @@ class Scanner {
             $filename = sprintf($basename, $i);
 
             $im->writeImage($filename);
+            $this->logger->info('Imaxe da enquisa ' . $i . '/' . $num_pages . ' gardada en ' . $filename);
+            
             $pages[] = $filename;
         }
         $im->destroy();
@@ -237,7 +261,8 @@ class Scanner {
         return $pages;
     }
 
-    private function testRun() {
+    private function testRun() 
+    {
         if ($this->filename === NULL) {
             throw new \Exception('Non se estableceu un nome de ficheiro PDF para procesar');
         }
@@ -249,6 +274,7 @@ class Scanner {
         if (!extension_loaded('imagick')) {
             throw new \Exception('Extensión imagick non instalada');
         }
+        $this->logger->info('Módulo Imagick cargado');
     }
 
 
