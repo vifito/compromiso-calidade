@@ -44,12 +44,16 @@
     <br />
 
     {{ form_start(delete_form) }}
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enquisaModal">
+    {# <div class="btn-group" role="group"> #}
+    <div>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#enquisaModal">
             <span class="fa fa-file-pdf-o"></span> Ver enquisa escaneada
         </button>
 
         <a href="{{ path('enquisa_index') }}" class="btn btn-primary">Listado</a>
+        
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        
         <a href="{{ path('enquisa_edit', { 'id': enquisa.id }) }}" class="btn btn-warning">Editar</a>
 
         <input type="submit" value="Eliminar" class="btn btn-danger" />

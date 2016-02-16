@@ -59,6 +59,30 @@ DQL;
         return $query->getResult();
     }
     
+    public function getPreguntaStatsByRestaurant($preguntaId, $restauranteId)
+    {
+        $dql =<<<DQL
+SELECT pregunta.id, pregunta.texto, opcion.valor AS label, count(opcion.valor) AS value
+FROM EnquisaBundle\Entity\Opcion opcion
+JOIN opcion.respostas resposta	
+JOIN opcion.pregunta pregunta
+JOIN resposta.enquisa enquisa
+JOIN enquisa.restaurante restaurante
+WHERE pregunta.id = :preguntaId
+    AND restaurante.id = :restauranteId
+GROUP BY opcion.valor, pregunta.texto
+ORDER BY opcion.id
+DQL;
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameters(array(
+            ':preguntaId'    => $preguntaId,
+            ':restauranteId' => $restauranteId,
+        ));
+        
+        return $query->getResult();        
+    }
+    
     public function getPreguntas()
     {        
         $dql =<<<DQL

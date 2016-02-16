@@ -8,9 +8,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                {# <th>Id</th> #}
                 <th>Nome</th>
-                <th>Ficheiro</th>
                 <th>Procesada</th>
                 <th>Actions</th>
             </tr>
@@ -18,28 +17,23 @@
         <tbody>
         {% for enquisa in enquisas %}
             <tr>
-                <td><a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.id }}</a></td>
-                <td>{{ enquisa.nome }}</td>
-                <td>{{ enquisa.ficheiro }}</td>
-                <td>{% if enquisa.procesada %}Yes{% else %}No{% endif %}</td>
+                {# <td><a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.id }}</a></td> #}
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('enquisa_edit', { 'id': enquisa.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.nome }}</a>
+                    <a href="{{ path('enquisa_rotate', {'filename': enquisa.ficheiro}) }}"><span class="fa fa-external-link"></span></a>
+                </td>
+                <td>{% if enquisa.procesada %}Yes{% else %}No{% endif %}</td>
+                
+                <td>
+                    <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}" class="btn btn-success">Ver</a>                    
+                    <a href="{{ path('enquisa_edit', { 'id': enquisa.id }) }}" class="btn btn-warning">Editar</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('enquisa_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+    <div class="pull-right">
+        <a href="{{ path('enquisa_new') }}" class="btn btn-primary">Alta nova enquisa</a>
+    </div>
 {% endblock %}

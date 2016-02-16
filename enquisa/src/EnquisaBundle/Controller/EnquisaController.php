@@ -49,7 +49,7 @@ class EnquisaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         
-        $restaurantes = $em->getRepository('EnquisaBundle:Restaurante')->getTotal();
+        $restaurantes = $em->getRepository('EnquisaBundle:Restaurante');
         dump($restaurantes->findAll());
         
         
@@ -125,6 +125,35 @@ class EnquisaController extends Controller
             'stats' => $preguntaStats,
         ]);
     }
+
+    /**
+     *
+     * @Route("/panel/{qid}/{rid}", name="enquisa_panel_filtered", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function questionFilteredAction(Request $request, $qid, $rid)
+    {
+        /** @var $em Doctrine\ORM\EntityManager */
+        $em = $this->getDoctrine()->getManager();
+        $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
+        
+        //$qid = $request->query->get('qid');
+        
+        if ($rid == 0) {
+            $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($qid);
+        } else {
+            $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStatsByRestaurant($qid, $rid);
+        }
+        
+        
+        /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
+        dump($preguntasStats);*/
+        
+        return new JsonResponse([
+            'stats' => $preguntaStats,
+        ]);
+    }    
+    
 
     /**
      * Creates a new Enquisa entity.

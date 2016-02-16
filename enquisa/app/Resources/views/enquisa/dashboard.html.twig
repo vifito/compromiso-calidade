@@ -22,8 +22,12 @@
                 
                 <br/>
                 
-                <select>
-                    
+                <label>Filtrar por Restaurante:</label>
+                <select id="filter_restaurante">
+                    <option value="0">TODOS</option>
+                    {% for key,val in restaurantes %}
+                        <option value="{{ val.id }}">{{ val.nome }}</option>
+                    {% endfor %}
                 </select>
                 
                 <br/>
@@ -53,19 +57,25 @@
     
     {# FIXME: non ven de forma correcta o array #}
     {% for pregunta in preguntas %}
-    <div class="col-lg-6">
-        <div class="panel panel-default panel-pregunta" data-id="{{ pregunta.id }}">
-            <div class="panel-heading">
-                {{ pregunta.texto }}
+        {% if loop.index0 is even %}
+        <div class="row">
+        {% endif %}
+            <div class="col-lg-6">
+                <div class="panel panel-default panel-pregunta" data-id="{{ pregunta.id }}">
+                    <div class="panel-heading">
+                        {{ pregunta.texto }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="chart"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
             </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <div class="chart"></div>
-            </div>
-            <!-- /.panel-body -->
+        {% if loop.index0 is odd %}
         </div>
-        <!-- /.panel -->
-    </div>
+        {% endif %}
     {% endfor %}
         
 </div>
@@ -111,7 +121,7 @@
             $.ajax({
                 url: path,
                 success: function(result) {
-                    console.log(result);
+                    $('div[data-id=' + dataId + '] div.chart').html('');
                     
                     Morris.Donut({
                         element: $('div[data-id=' + dataId + '] div.chart'),
@@ -120,6 +130,36 @@
                 },
                 dataType: 'json'
             });
+        });
+        
+        $('#filter_restaurante').change(function(evt) {
+            evt.stopPropagation();
+            
+            var restauranteId = $(this).val();
+            
+            $('.panel-pregunta').each(function(i, panel) {
+                var dataId = $(panel).data('id');
+                path = Routing.generate('enquisa_panel_filtered', { qid: dataId, rid: restauranteId });
+                console.log(path);
+                
+                $('div[data-id=' + dataId + '] div.chart').html('<p>Cargando...</p>');
+                
+                $.ajax({
+                    url: path,
+                    success: function(result) {
+                        $('div[data-id=' + dataId + '] div.chart').html('');
+                        
+                        Morris.Donut({
+                            element: $('div[data-id=' + dataId + '] div.chart'),
+                            data:  result.stats 
+                        });
+                        
+                        console.log(result.stats);
+                    },
+                    dataType: 'json'
+                });
+            });
+            
         });
     });
     </script>
