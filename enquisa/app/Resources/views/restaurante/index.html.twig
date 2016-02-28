@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Restaurante list</h1>
+    <h1>Restaurantes</h1>
 
     <table class="table">
         <thead>
@@ -15,23 +15,20 @@
             <tr>
                 <td><a href="{{ path('restaurante_show', { 'id': restaurante.id }) }}">{{ restaurante.nome }}</a></td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('restaurante_show', { 'id': restaurante.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('restaurante_edit', { 'id': restaurante.id }) }}">edit</a>
-                        </li>
-                    </ul>
+
+                            <a href="{{ path('restaurante_show', { 'id': restaurante.id }) }}" class="btn
+                            btn-primary">ver</a>
+
+                            <a href="{{ path('restaurante_edit', { 'id': restaurante.id }) }}" class="btn
+                            btn-warning">editar</a>
+
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('restaurante_new') }}">Engadir novo restaurante</a>
-        </li>
-    </ul>
+    <div>
+            <a href="{{ path('restaurante_new') }}" class="btn btn-warning">Engadir novo restaurante</a>
+        </div>
 {% endblock %}

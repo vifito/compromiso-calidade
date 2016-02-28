@@ -1,21 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Restaurante edit</h1>
+    <h1>Edición Restaurante</h1>
 
     {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+
+
+    <div class="form-group">
+        {{ form_label(edit_form.nome) }}
+        {{ form_widget(edit_form.nome, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+
+    <input type="submit" value="Editar" class="btn btn-warning"/>
     {{ form_end(edit_form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('restaurante_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <div class="pull-right">
+        <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Listado</a>
+
+        {{ form_start(delete_form) }}
+        <input type="submit" value="Eliminar" class="btn btn-danger pull-right"/>
+        {{ form_end(delete_form) }}
+    </div>
 {% endblock %}

@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Opcion list</h1>
+    <h1>Opcións</h1>
 
-    <table>
+    <table class="table table-striped table-bordered">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Valor</th>
-                <th>Width</th>
-                <th>Height</th>
-                <th>X</th>
-                <th>Y</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Valor</th>
+            <th>Width</th>
+            <th>Height</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for opcion in opcions %}
@@ -25,23 +25,15 @@
                 <td>{{ opcion.x }}</td>
                 <td>{{ opcion.y }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('opcion_show', { 'id': opcion.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('opcion_edit', { 'id': opcion.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('opcion_show', { 'id': opcion.id }) }}" class="btn btn-success">ver</a>
+                    <a href="{{ path('opcion_edit', { 'id': opcion.id }) }}" class="btn btn-primary">editar</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('opcion_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+    <div class="pull-right">
+        <a href="{{ path('opcion_new') }}" class="btn btn-primary">Crear nova opción</a>
+    </div>
 {% endblock %}

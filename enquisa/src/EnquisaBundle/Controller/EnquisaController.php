@@ -2,6 +2,7 @@
 
 namespace EnquisaBundle\Controller;
 
+use EnquisaBundle\EnquisaBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use EnquisaBundle\Entity\Enquisa;
+use EnquisaBundle\Entity\Resposta;
 use EnquisaBundle\Form\EnquisaType;
 
 /**
@@ -30,7 +32,9 @@ class EnquisaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $enquisas = $em->getRepository('EnquisaBundle:Enquisa')->findAll();
+        $enquisas = $em->getRepository('EnquisaBundle:Enquisa')->findBy(
+            array(), array('id' => 'DESC')
+        );
 
         return $this->render('enquisa/index.html.twig', array(
             'enquisas' => $enquisas,
@@ -50,17 +54,17 @@ class EnquisaController extends Controller
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         
         $restaurantes = $em->getRepository('EnquisaBundle:Restaurante');
-        dump($restaurantes->findAll());
+        //dump($restaurantes->findAll());
         
         
         $totalRestaurantes = $restaurantes->getTotalRestaurantes();
-        dump($totalRestaurantes);
+        //dump($totalRestaurantes);
         
         $preguntas = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntas();
-        dump($preguntas);
+        //dump($preguntas);
                         
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
-        dump($preguntasStats);*/
+        //dump($preguntasStats);*/
 
         return $this->render('enquisa/dashboard.html.twig', array(
             'total' => $total,
@@ -89,7 +93,8 @@ class EnquisaController extends Controller
         }
         
         $image = new \Imagick($file);
-        $image->rotateImage(new \ImagickPixel('#00000000'), 90);
+        // Por si fixese falta rotar a imaxe
+        //$image->rotateImage(new \ImagickPixel('#00000000'), 90);
             
         
         $response = new Response();
@@ -205,22 +210,49 @@ class EnquisaController extends Controller
      */
     public function editAction(Request $request, Enquisa $enquisa)
     {
+        /** @var $em Doctrine\ORM\EntityManager */
+        $em = $this->getDoctrine()->getManager();
+
         $deleteForm = $this->createDeleteForm($enquisa);
         $editForm = $this->createForm('EnquisaBundle\Form\EnquisaType', $enquisa);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($enquisa);
             $em->flush();
 
+            // Eliminar respostas anteriores
+            $query = $em->createQuery('DELETE FROM EnquisaBundle\Entity\Resposta r WHERE r.enquisa=:enquisa');
+            $query->setParameters(array(
+                'enquisa' => $enquisa//->getId()
+            ));
+            $query->execute();
+
+            $opciones = $request->get('opcion');
+            foreach($opciones as $opcion) {
+                /** @var $resposta EnquisaBundle\Entity\Resposta */
+                $resposta = new Resposta();
+
+                $resposta->setEnquisa($enquisa);
+                $resposta->setOpcion(
+                    $em->getRepository('EnquisaBundle:Opcion')->findOneById($opcion)
+                );
+
+                $em->persist($resposta);
+                $em->flush();
+            }
+
             return $this->redirectToRoute('enquisa_edit', array('id' => $enquisa->getId()));
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $preguntas = $em->getRepository('EnquisaBundle:Pregunta')->getOpciones();
 
         return $this->render('enquisa/edit.html.twig', array(
             'enquisa' => $enquisa,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'preguntas' => $preguntas,
         ));
     }
 
@@ -265,6 +297,29 @@ class EnquisaController extends Controller
     }
 
     /**
+     * Calibrar
+     *
+     * @Route("/calibrate/{filename}", name="enquisa_calibrate")
+     * @Method({"GET"})
+     */
+    public function calibrateAction(Request $request, $filename)
+    {
+        //dump($scanner);
+        $dir = $this->container->getParameter('kernel.root_dir') .
+            '/../web/uploads/enquisas';
+
+        $filename = $dir . '/' . $filename;
+
+        $filename = '/home/vifito/public_html/compromiso-calidade/enquisa/web/uploads/enquisas/Vento.pdf';
+
+        /** @var $scanner \EnquisaBundle\Service\Scanner */
+        $scanner = $this->container->get('scanner');
+        $scanner->calibrate($filename);
+
+        return new Response('<h1>OK</h1>');
+    }
+
+    /**
      * Deletes a Enquisa entity.
      *
      * @Route("/{id}", name="enquisa_delete")
@@ -277,6 +332,14 @@ class EnquisaController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            // Eliminar respostas anteriores
+            $query = $em->createQuery('DELETE FROM EnquisaBundle\Entity\Resposta r WHERE r.enquisa=:enquisa');
+            $query->setParameters(array(
+                'enquisa' => $enquisa//->getId()
+            ));
+            $query->execute();
+
             $em->remove($enquisa);
             $em->flush();
         }

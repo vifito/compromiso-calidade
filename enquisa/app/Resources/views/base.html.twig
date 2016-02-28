@@ -65,6 +65,8 @@
                 <ul class="dropdown-menu dropdown-user">
                     {#<li><a href="#"><i class="fa fa-gear fa-fw"></i> Configuracións</a></li>
                     <li class="divider"></li>#}
+                    <li><a href="{{ path('fos_user_profile_edit') }}"><i class="fa fa-user-md fa-fw"></i>
+                            Editar Perfil</a></li>
                     <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Pechar sesión</a></li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -87,19 +89,19 @@
                         </div>
                     </li -->
                     <li>
-                        <a href="{{ path('enquisa_dashboard') }}"><i class="fa fa-pie-chart fa-fw"></i> Dashboard</a>
+                        <a href="{{ path('enquisa_dashboard') }}"><i class="fa fa-tachometer fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
                         <a href="{{ path('enquisa_upload') }}"><i class="fa fa-upload fa-fw"></i> Subir enquisa</a>
                     </li>
-
+                    <li>
+                        <a href="{{ path('enquisa_index') }}"><i class="fa fa-check-square fa-fw"></i> Enquisas</a>
+                    </li>
                     <li>
                         <a href="#" aria-expanded="false"><i class="fa fa-files-o fa-fw"></i> Configuracións <span class="fa
                         arrow"></span></a>
                         <ul class="nav nav-second-level" aria-expanded="false">
-                            <li>
-                                <a href="{{ path('enquisa_index') }}"><i class="fa fa-check-square fa-fw"></i> Enquisas</a>
-                            </li>
+
                             {#<li>
                                 <a href="{{ path('resposta_index') }}"><i class="fa fa-comments-o fa-fw"></i> Respostas</a>
                             </li>#}
@@ -107,7 +109,8 @@
                                 <a href="{{ path('pregunta_index') }}"><i class="fa fa-question-circle fa-fw"></i> Preguntas</a>
                             </li>
                             <li>
-                                <a href="{{ path('opcion_index') }}"><i class="fa fa-pencil-square fa-fw"></i> Opciones</a>
+                                <a href="{{ path('opcion_index') }}"><i class="fa fa-pencil-square fa-fw"></i>
+                                    Opcións</a>
                             </li>
                             <li>
                                 <a href="{{ path('restaurante_index') }}"><i class="fa fa-cutlery fa-fw"></i>

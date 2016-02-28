@@ -10,11 +10,17 @@ use Monolog\Logger;
 
 class Scanner {
 
+    const RATIO = 2.0;
+
     private $rexions = NULL;
 
     private $filename = NULL;
 
     private $resultados = NULL;
+
+    private $calibrate = NULL;
+
+    private $procesada = NULL;
 
     /**
      * @var string|null
@@ -36,9 +42,10 @@ class Scanner {
 
     public function __construct(EntityManager $em, $basedir, Logger $logger) 
     {
-        $this->basedir = $basedir;
-        $this->em      = $em;
-        $this->logger  = $logger;
+        $this->basedir   = $basedir;
+        $this->em        = $em;
+        $this->logger    = $logger;
+        $this->calibrate = false;
     }
 
 
@@ -78,7 +85,7 @@ class Scanner {
             $enquisa = new \EnquisaBundle\Entity\Enquisa();
             $enquisa->setNome($ficheiro);
             $enquisa->setFicheiro($ficheiro);
-            $enquisa->setProcesada(false);
+            $enquisa->setProcesada(true);
             $enquisa->setRestaurante($restaurante);
 
             $this->em->persist($enquisa);
@@ -95,9 +102,54 @@ class Scanner {
 
                     $this->em->persist($resposta);
                     $this->em->flush();
+                } else {
+                    $enquisa->setProcesada(false);
+                    $this->em->persist($enquisa);
+                    $this->em->flush();
                 }
             }
         }
+    }
+
+
+    /**
+     * Método para calibrar
+     *
+     * @param $filename
+     * @throws \Exception
+     */
+    public function calibrate($filename)
+    {
+        $this->calibrate = true;
+
+        $this->setFilename($filename);
+
+        $fs = new Filesystem();
+        if(!$fs->exists($this->getFilename())) {
+            throw new Exception('A ruta ao ficheiro non é válida');
+        }
+
+        $this->logger->info('Procesando ficheiro: ' . $this->getFilename());
+
+        // Cargar rexións
+        $this->loadRexions();
+
+        // Comprobar si se pode executar o proceso, en caso contrario lanza Exception
+        $this->testRun();
+
+        // Extraer as páxinas do PDF, gardar os paths de cada páxina/imaxe
+        $pages = $this->extractPages();
+        foreach($pages as $page) {
+            $this->logger->info('Procesando páxina: ' . $page);
+            $this->processPage($page);
+        }
+
+        /*foreach ($pages as $page) {
+            $this->logger->info('Procesando páxina: ' . $page);
+            $this->processPage($page);
+        }*/
+
+
     }
 
     /**
@@ -108,6 +160,9 @@ class Scanner {
         $enquisa = new \Imagick(realpath($page));
 
         $filename = pathinfo($page)['filename'];
+
+        // Marcar como que o procesamento vai ben
+        $this->procesada = TRUE;
 
         // Recorrer as preguntas por cada páxina
         foreach ($this->rexions as $i => $question) {
@@ -132,15 +187,23 @@ class Scanner {
 
             $box->cropImage($width, $height, $x, $y);
 
+            if($this->calibrate) {
+                $box->writeImage($basename = $this->basedir . '/' . ($this->i++) . '.png');
+            }
+
+
             $weights[] = array(
                 'weight' => $this->weight($box),
                 'opcionId' => $question['opcions'][$i]['id']
             );
+
+            $box->destroy();
         }
         
         $result = $this->selected($weights);
         if($result == -1) {
             $this->logger->error('Marca non detectada');
+            $this->procesada = FALSE;
         }
 
         return $result;
@@ -199,7 +262,7 @@ class Scanner {
         list($opcionId, $weight) = $this->maximo($weights);
 
         foreach($weights as $value) {                        
-            if(($opcionId != $value['opcionId']) && ($value['weight']+5 >= $weight)) {
+            if(($opcionId != $value['opcionId']) && ($value['weight']+Scanner::RATIO >= $weight)) {
                 return -1;
             }
         }
@@ -235,8 +298,9 @@ class Scanner {
         $this->logger->info('Basename: ' . $basename);
 
         $im = new \Imagick();
-        $im->setResolution(300, 300);
-        //$im->setResolution(72, 72);
+        //$im->setResolution(300, 300);
+        $im->setResolution(150, 150);
+        //$im->setResolution(200, 200);
         $im->readImageBlob(file_get_contents($this->filename));
         $this->logger->info('Cargando: ' . $this->filename);
                 
@@ -250,6 +314,7 @@ class Scanner {
             $im->setImageFormat('png');
 
             $filename = sprintf($basename, $i);
+            $this->logger->info('Gardando...: ' . $filename);
 
             $im->writeImage($filename);
             $this->logger->info('Imaxe da enquisa ' . $i . '/' . $num_pages . ' gardada en ' . $filename);

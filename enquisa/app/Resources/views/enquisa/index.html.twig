@@ -3,7 +3,7 @@
 {% block title %}Listado de Enquisas{% endblock %}
 
 {% block body %}
-    <h1>Listado de Enquisas</h1>
+    <h1>Enquisas</h1>
 
     <table class="table">
         <thead>
@@ -22,7 +22,9 @@
                     <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.nome }}</a>
                     <a href="{{ path('enquisa_rotate', {'filename': enquisa.ficheiro}) }}"><span class="fa fa-external-link"></span></a>
                 </td>
-                <td>{% if enquisa.procesada %}Yes{% else %}No{% endif %}</td>
+                <td>{% if enquisa.procesada %}<i class="fa fa-check fa-2x" style="color:#030;"></i>
+                    {% else %}<i class="fa fa-exclamation-circle fa-2x" style="color:#900;"></i>
+                    {% endif %}</td>
                 
                 <td>
                     <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}" class="btn btn-success">Ver</a>                    
@@ -33,7 +35,7 @@
         </tbody>
     </table>
 
-    <div class="pull-right">
+    {#<div class="pull-right">
         <a href="{{ path('enquisa_new') }}" class="btn btn-primary">Alta nova enquisa</a>
-    </div>
+    </div>#}
 {% endblock %}
