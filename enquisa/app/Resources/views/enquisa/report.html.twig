@@ -1,0 +1,59 @@
+{% extends 'report.html.twig' %}
+
+{% block title %}Informe do restaurante {{ restaurante.nome }}{% endblock %}
+
+{% block pagetitle %}Informe do restaurante {{ restaurante.nome }}{% endblock %}
+
+{% block body %}
+
+    <table width="90%" align="right">
+        <tr>
+            <td align="right"><strong>Total enquisas:</strong></td>
+            <td>{{ total }}</td>
+        </tr>
+        <tr>
+            <td align="right"><strong>Total restaurantes:</strong></td>
+            <td>{{ total_restaurantes }}</td>
+        </tr>
+        <tr>
+            <td align="right"><strong>{{ restaurante.nome }}:</strong></td>
+            <td>{{ total_enquisas }}</td>
+        </tr>
+    </table>
+
+    <br/><br/>
+
+    <table width="90%" align="center">
+        <thead>
+        <tr>
+            <th align="center">
+                <h2>{{ restaurante.nome }}</h2>
+            </th>
+            <th align="center">
+                <h2>Resultados xerais</h2>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+    {% for pregunta in preguntas %}
+        <tr>
+            <td align="center">
+                {{ pregunta.texto }}<br/>
+                <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': restaurante.id, 'style': 'VividTheme' })
+                }}"/>
+            </td>
+            <td align="center">
+                {{ pregunta.texto }}<br/>
+                <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': 0, 'style': 'UniversalTheme'
+                    })
+                    }}"/>
+            </td>
+        </tr>
+    {% endfor %}
+        </tbody>
+
+    </table>
+
+
+{% endblock %}

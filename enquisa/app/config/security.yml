@@ -34,4 +34,7 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/enquisa/report, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/enquisa/pdf, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/enquisa/piechart, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
