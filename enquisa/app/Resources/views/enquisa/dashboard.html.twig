@@ -29,18 +29,11 @@
                         <option value="{{ val.id }}">{{ val.nome }}</option>
                     {% endfor %}
                 </select>
-                
                 <br/>
 
-                <ul class="list-group">
-                    {% for key,val in restaurantes %}
-                    <li class="list-group-item">
-                        <a href="{{ path('enquisa_report', {'rid': val.id}) }}">{{ val.nome }}</a> -
-                        <a href="{{ path('enquisa_pdf', {'rid': val.id}) }}">PDF</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                <br/>
+                <a href="{{ path('enquisa_reports') }}" class="btn btn-success pull-left">
+                    <span class="fa fa-upload"></span> Ver Informes
+                </a>
                 
                 <a href="{{ path('enquisa_upload') }}" class="btn btn-primary pull-right">
                     <span class="fa fa-upload"></span> Subir nova enquisa

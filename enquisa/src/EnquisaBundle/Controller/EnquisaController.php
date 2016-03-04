@@ -29,7 +29,7 @@ class EnquisaController extends Controller
     /**
      * Lists all Enquisa entities.
      *
-     * @Route("/", name="enquisa_index")
+     * @Route("/index", name="enquisa_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -287,6 +287,23 @@ class EnquisaController extends Controller
         $html2pdf->WriteHTML($html);
         $html2pdf->Output('exemple.pdf');
 
+    }
+
+    /**
+     * Lists reports
+     *
+     * @Route("/reports", name="enquisa_reports")
+     * @Method("GET")
+     */
+    public function reportsAction()
+    {
+        /** @var $em Doctrine\ORM\EntityManager */
+        $em = $this->getDoctrine()->getManager();
+        $restaurantes = $em->getRepository('EnquisaBundle:Restaurante');
+
+        return $this->render('enquisa/reports.html.twig', array(
+          'restaurantes' => $restaurantes->findAll(),
+        ));
     }
     
 

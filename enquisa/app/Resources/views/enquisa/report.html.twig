@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    <table width="90%" align="right">
+    <table width="640" align="center" cellpadding="2">
         <tr>
             <td align="right"><strong>Total enquisas:</strong></td>
             <td>{{ total }}</td>
@@ -23,7 +23,7 @@
 
     <br/><br/>
 
-    <table width="90%" align="center">
+    <table width="640" align="center">
         <thead>
         <tr>
             <th align="center">
@@ -38,13 +38,16 @@
         <tbody>
     {% for pregunta in preguntas %}
         <tr>
+            <td colspan="2" align="center">
+                <h3>{{ pregunta.texto }}</h3>
+            </td>
+        </tr>
+        <tr>
             <td align="center">
-                {{ pregunta.texto }}<br/>
                 <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': restaurante.id, 'style': 'VividTheme' })
                 }}"/>
             </td>
             <td align="center">
-                {{ pregunta.texto }}<br/>
                 <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': 0, 'style': 'UniversalTheme'
                     })
                     }}"/>
