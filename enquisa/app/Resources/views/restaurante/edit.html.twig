@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Edición Restaurante{% endblock %}
+
+{% block pagetitle %}Edición Restaurante{% endblock %}
+
 {% block body %}
-    <h1>Edición Restaurante</h1>
 
     {{ form_start(edit_form) }}
 
@@ -15,9 +18,10 @@
     {{ form_end(edit_form) }}
 
     <div class="pull-right">
-        <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Listado</a>
 
         {{ form_start(delete_form) }}
+        <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Listado</a>
+        &nbsp;&nbsp;&nbsp;
         <input type="submit" value="Eliminar" class="btn btn-danger pull-right"/>
         {{ form_end(delete_form) }}
     </div>

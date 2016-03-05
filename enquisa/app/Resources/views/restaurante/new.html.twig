@@ -7,14 +7,15 @@
 {% block body %}
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
 
-        <input type="submit" value="Create" />
+        <div class="form-group">
+            {{ form_label(form.nome) }}
+            {{ form_widget(form.nome, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <input type="submit" value="Crear" class="btn btn-warning" />
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Listado Restaurantes</a>
     {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('restaurante_index') }}">Listado Restaurantes</a>
-        </li>
-    </ul>
 {% endblock %}

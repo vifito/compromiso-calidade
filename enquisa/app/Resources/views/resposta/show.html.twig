@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Resposta</h1>
+{% block title %}Resposta{% endblock %}
 
-    <table>
+{% block pagetitle %}Resposta{% endblock %}
+
+{% block body %}
+
+    <table class="table table-bordered table-striped">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -16,14 +19,14 @@
 
     <ul>
         <li>
-            <a href="{{ path('resposta_index') }}">Back to the list</a>
+            <a href="{{ path('resposta_index') }}" class="btn btn-primary">Listado</a>
         </li>
         <li>
-            <a href="{{ path('resposta_edit', { 'id': respostum.id }) }}">Edit</a>
+            <a href="{{ path('resposta_edit', { 'id': respostum.id }) }}" class="btn btn-warning">Editar</a>
         </li>
         <li>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input type="submit" value="Delete" class="btn btn-danger" />
             {{ form_end(delete_form) }}
         </li>
     </ul>

@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Nova Pregunta{% endblock %}
+
+{% block pagetitle %}Nova Pregunta{% endblock %}
+
 {% block body %}
-    <h1>Nova Pregunta</h1>
 
     {{ form_start(form) }}
-
-
 
     <div class="form-group">
         {{ form_label(form.texto) }}

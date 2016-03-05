@@ -195,7 +195,7 @@ class EnquisaController extends Controller
             JpGraph::module('pie');
             JpGraph::module('pie3d');
 
-            $graph = new \PieGraph(300, 280);
+            $graph = new \PieGraph(350, 280);
 
             if($style == 'VividTheme') {
                 $theme_class = new \VividTheme;

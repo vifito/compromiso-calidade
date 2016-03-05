@@ -6,42 +6,43 @@
 
 {% block body %}
 
-    <table width="640" align="center" cellpadding="2">
+    <table width="720" align="center" cellpadding="10">
         <tr>
             <td align="right"><strong>Total enquisas:</strong></td>
-            <td>{{ total }}</td>
+            <td align="right">{{ total }}</td>
         </tr>
         <tr>
             <td align="right"><strong>Total restaurantes:</strong></td>
-            <td>{{ total_restaurantes }}</td>
+            <td align="right">{{ total_restaurantes }}</td>
         </tr>
         <tr>
             <td align="right"><strong>{{ restaurante.nome }}:</strong></td>
-            <td>{{ total_enquisas }}</td>
+            <td align="right">{{ total_enquisas }}</td>
         </tr>
     </table>
 
     <br/><br/>
 
-    <table width="640" align="center">
+
+    {% for pregunta in preguntas %}
+        <table width="720" align="center">
         <thead>
         <tr>
+            <th colspan="2" align="center">
+                <strong>{{ pregunta.texto }}</strong>
+            </th>
+        </tr>
+        <tr>
             <th align="center">
-                <h2>{{ restaurante.nome }}</h2>
+                <strong>{{ restaurante.nome }}</strong>
             </th>
             <th align="center">
-                <h2>Resultados xerais</h2>
+                <strong>Resultados xerais</strong>
             </th>
         </tr>
         </thead>
 
         <tbody>
-    {% for pregunta in preguntas %}
-        <tr>
-            <td colspan="2" align="center">
-                <h3>{{ pregunta.texto }}</h3>
-            </td>
-        </tr>
         <tr>
             <td align="center">
                 <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': restaurante.id, 'style': 'VividTheme' })
@@ -53,10 +54,10 @@
                     }}"/>
             </td>
         </tr>
-    {% endfor %}
         </tbody>
-
-    </table>
+        </table>
+        <br/>
+    {% endfor %}
 
 
 {% endblock %}

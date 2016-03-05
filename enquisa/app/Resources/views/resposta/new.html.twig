@@ -1,16 +1,20 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Nova Resposta{% endblock %}
+
+{% block pagetitle %}Nova Resposta{% endblock %}
+
+
 {% block body %}
-    <h1>Resposta creation</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+        <input type="submit" value="Crear" class="btn btn-warning" />
     {{ form_end(form) }}
 
     <ul>
         <li>
-            <a href="{{ path('resposta_index') }}">Back to the list</a>
+            <a href="{{ path('resposta_index') }}" class="btn btn-primary">Listado</a>
         </li>
     </ul>
 {% endblock %}

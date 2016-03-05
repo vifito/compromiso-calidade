@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Restaurante</h1>
+{% block title %}Restaurante{% endblock %}
 
-    <table class="table">
+{% block pagetitle %}Restaurante{% endblock %}
+
+{% block body %}
+
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -17,11 +20,12 @@
     </table>
 
     <div>
+        {{ form_start(delete_form) }}
             <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Voltar ao listado</a>
+            &nbsp;&nbsp;&nbsp;
             <a href="{{ path('restaurante_edit', { 'id': restaurante.id }) }}" class="btn btn-warning">Editar</a>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Eliminar"  class="btn btn-danger"/>
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+            &nbsp;&nbsp;&nbsp;
+            <input type="submit" value="Eliminar"  class="btn btn-danger"/>
+        {{ form_end(delete_form) }}
+    </div>
 {% endblock %}
